@@ -68,3 +68,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# Roadblocks encountered
+
+Fetch gets blocked in Chrome
+Had to follow workaround at https://www.stackhawk.com/blog/rails-cors-guide/ to enable CORS. Remember to add gem 'rack-cors' in the Gemfile.
