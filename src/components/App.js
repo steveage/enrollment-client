@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 function App() {
   const [semesters, setSemesters] = useState([]);
   const semestersUrl = 'http://localhost:3001/semesters';
-  
+
   useEffect(fetchSemesters, []);
 
   function fetchSemesters() {
@@ -24,6 +24,23 @@ function App() {
       .then(data => setDataFunction(data));
   }
 
+  function onSemesterAdded(semester) {
+    postData( semestersUrl, semester, semesters, setSemesters );
+  }
+
+  function postData(url, data, dataSet, setDataFunction) {
+    const stringData = JSON.stringify(data);
+    const settings = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: stringData
+    }
+
+    fetch( url, settings )
+      .then( response => response.json() )
+      .then( responseData => setDataFunction( [ ...dataSet, responseData ] ) );
+  }
+
   return (
     <div>
       <NavBar/>
@@ -32,7 +49,7 @@ function App() {
         <Route path='/login' element = { <Login/> }/>
         <Route path='/course' element = { <Course/> }/>
         <Route path='/enrollment' element = { <Enrollment/> }/>
-        <Route path='/semester' element = { <Semester semesters = { semesters } /> }/>
+        <Route path='/semester' element = { <Semester semesters = { semesters } semesterAdded = { onSemesterAdded } /> }/>
         <Route path='/user' element = { <User/> }/>
         <Route path='*' element = { <div>Not Found!</div> }/>
       </Routes>
