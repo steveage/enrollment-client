@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import NavBar from "./NavBar";
-import User from "./User";
+import Student from "./Student";
+import Teacher from "./Teacher";
 import Login from "./Login";
 import Course from "./Course";
 import Enrollment from "./Enrollment";
@@ -10,12 +11,20 @@ import { useEffect, useState } from 'react';
 
 function App() {
   const [semesters, setSemesters] = useState([]);
-  const semestersUrl = 'http://localhost:3001/semesters';
+  const [students, setStudents] = useState([]);
 
-  useEffect(fetchSemesters, []);
+  const semestersUrl = 'http://localhost:3001/semesters';
+  const studentsUrl = 'http://localhost:3001/students';
+
+  useEffect( fetchSemesters, [] );
+  useEffect( fetchStudents, [] )
 
   function fetchSemesters() {
-    fetchData(semestersUrl, setSemesters);
+    fetchData( semestersUrl, setSemesters );
+  }
+
+  function fetchStudents() {
+    fetchData( studentsUrl, setStudents );
   }
 
   function fetchData(url, setDataFunction) {
@@ -26,6 +35,10 @@ function App() {
 
   function onSemesterAdded(semester) {
     postData( semestersUrl, semester, semesters, setSemesters );
+  }
+
+  function onStudentAdded( student ) {
+    postData( studentsUrl, student, students, setStudents );
   }
 
   function postData(url, data, dataSet, setDataFunction) {
@@ -50,7 +63,8 @@ function App() {
         <Route path='/course' element = { <Course/> }/>
         <Route path='/enrollment' element = { <Enrollment/> }/>
         <Route path='/semester' element = { <Semester semesters = { semesters } semesterAdded = { onSemesterAdded } /> }/>
-        <Route path='/user' element = { <User/> }/>
+        <Route path='/teacher' element = { <Teacher/> }/>
+        <Route path='/student' element = { <Student students = { students } studentAdded = { onStudentAdded } /> }/>
         <Route path='*' element = { <div>Not Found!</div> }/>
       </Routes>
     </div>
