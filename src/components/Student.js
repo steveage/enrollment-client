@@ -35,7 +35,7 @@ function Student( { students, studentAdded } ) {
                 </label>
                 <label>
                     Email:
-                    <input type = { 'text' } name = 'email' value = { formData.email } onChange = { handleChange } />
+                    <input type = { 'email' } name = 'email' value = { formData.email } onChange = { handleChange } />
                 </label>
                 <button type = { 'submit' }>Add Student</button>
             </form>

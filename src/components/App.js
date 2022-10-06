@@ -1,4 +1,3 @@
-import { Routes, Route } from 'react-router-dom';
 import NavBar from "./NavBar";
 import Student from "./Student";
 import Teacher from "./Teacher";
@@ -7,17 +6,24 @@ import Course from "./Course";
 import Enrollment from "./Enrollment";
 import Semester from "./Semester";
 import Home from "./Home";
+import { Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [semesters, setSemesters] = useState([]);
-  const [students, setStudents] = useState([]);
+  const [ semesters, setSemesters ] = useState([]);
+  const [ students, setStudents ] = useState([]);
+  const [ teachers , setTeachers ] = useState([]);
+  const [ courses, setCourses ] = useState([]);
 
   const semestersUrl = 'http://localhost:3001/semesters';
   const studentsUrl = 'http://localhost:3001/students';
+  const teachersUrl = 'http://localhost:3001/teachers';
+  const coursesUrl = 'http://localhost:3001/courses';
 
   useEffect( fetchSemesters, [] );
-  useEffect( fetchStudents, [] )
+  useEffect( fetchStudents, [] );
+  useEffect( fetchTeachers, [] );
+  useEffect( fetchCourses, [] );
 
   function fetchSemesters() {
     fetchData( semestersUrl, setSemesters );
@@ -25,6 +31,14 @@ function App() {
 
   function fetchStudents() {
     fetchData( studentsUrl, setStudents );
+  }
+
+  function fetchTeachers() {
+    fetchData( teachersUrl, setTeachers );
+  }
+
+  function fetchCourses() {
+    fetchData( coursesUrl, setCourses );
   }
 
   function fetchData(url, setDataFunction) {
@@ -39,6 +53,14 @@ function App() {
 
   function onStudentAdded( student ) {
     postData( studentsUrl, student, students, setStudents );
+  }
+
+  function onTeacherAdded( teacher ) {
+    postData( teachersUrl, teacher, teachers, setTeachers );
+  }
+
+  function onCourseAdded( course ) {
+    postData( coursesUrl, course, courses, setCourses );
   }
 
   function postData(url, data, dataSet, setDataFunction) {
@@ -60,11 +82,11 @@ function App() {
       <Routes>
         <Route path='/' element = { <Home/> }/>
         <Route path='/login' element = { <Login/> }/>
-        <Route path='/course' element = { <Course/> }/>
         <Route path='/enrollment' element = { <Enrollment/> }/>
         <Route path='/semester' element = { <Semester semesters = { semesters } semesterAdded = { onSemesterAdded } /> }/>
-        <Route path='/teacher' element = { <Teacher/> }/>
+        <Route path='/teacher' element = { <Teacher teachers = { teachers } teacherAdded = { onTeacherAdded } /> }/>
         <Route path='/student' element = { <Student students = { students } studentAdded = { onStudentAdded } /> }/>
+        <Route path='/course' element = { <Course courses = { courses } semesters = { semesters } teachers = { teachers } courseAdded = { onCourseAdded } /> }/>
         <Route path='*' element = { <div>Not Found!</div> }/>
       </Routes>
     </div>

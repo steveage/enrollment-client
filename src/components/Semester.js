@@ -23,9 +23,9 @@ function Semester( { semesters, semesterAdded } ) {
 
     function periodOptionsUi() {
         return [ 
-            <option value = 'spring' >spring</option>,
-            <option value = 'summer' >summer</option>,
-            <option value = 'fall' >fall</option>
+            <option key = 'spring' value = 'spring' >spring</option>,
+            <option key = 'summer' value = 'summer' >summer</option>,
+            <option key = 'fall' value = 'fall' >fall</option>
         ]
     }
 
