@@ -14,16 +14,19 @@ function App() {
   const [ students, setStudents ] = useState([]);
   const [ teachers , setTeachers ] = useState([]);
   const [ courses, setCourses ] = useState([]);
+  const [ enrollments, setEnrollments ]  = useState([]);
 
   const semestersUrl = 'http://localhost:3001/semesters';
   const studentsUrl = 'http://localhost:3001/students';
   const teachersUrl = 'http://localhost:3001/teachers';
   const coursesUrl = 'http://localhost:3001/courses';
+  const enrollmentsUrl = 'http://localhost:3001/enrollments';
 
   useEffect( fetchSemesters, [] );
   useEffect( fetchStudents, [] );
   useEffect( fetchTeachers, [] );
   useEffect( fetchCourses, [] );
+  useEffect( fetchEnrollments, []);
 
   function fetchSemesters() {
     fetchData( semestersUrl, setSemesters );
@@ -39,6 +42,10 @@ function App() {
 
   function fetchCourses() {
     fetchData( coursesUrl, setCourses );
+  }
+
+  function fetchEnrollments() {
+    fetchData( enrollmentsUrl, setEnrollments );
   }
 
   function fetchData(url, setDataFunction) {
@@ -63,6 +70,10 @@ function App() {
     postData( coursesUrl, course, courses, setCourses );
   }
 
+  function onEnrollmentAdded( enrollment ) {
+    postData ( enrollmentsUrl, enrollment, enrollments, setEnrollments );
+  }
+
   function postData(url, data, dataSet, setDataFunction) {
     const stringData = JSON.stringify(data);
     const settings = {
@@ -82,7 +93,7 @@ function App() {
       <Routes>
         <Route path='/' element = { <Home/> }/>
         <Route path='/login' element = { <Login/> }/>
-        <Route path='/enrollment' element = { <Enrollment/> }/>
+        <Route path='/enrollment' element = { <Enrollment enrollments = { enrollments } students = { students } courses = { courses } enrollmentAdded = { onEnrollmentAdded }/> }/>
         <Route path='/semester' element = { <Semester semesters = { semesters } semesterAdded = { onSemesterAdded } /> }/>
         <Route path='/teacher' element = { <Teacher teachers = { teachers } teacherAdded = { onTeacherAdded } /> }/>
         <Route path='/student' element = { <Student students = { students } studentAdded = { onStudentAdded } /> }/>
