@@ -21,6 +21,7 @@ function App() {
   const teachersUrl = 'http://localhost:3001/teachers';
   const coursesUrl = 'http://localhost:3001/courses';
   const enrollmentsUrl = 'http://localhost:3001/enrollments';
+  const loginUrl = 'http://localhost:3001/login';
 
   useEffect( fetchSemesters, [] );
   useEffect( fetchStudents, [] );
@@ -74,6 +75,14 @@ function App() {
     postData ( enrollmentsUrl, enrollment, enrollments, setEnrollments );
   }
 
+  function emptyFunction () {
+
+  }
+
+  function onCredentialsCreated( credentials ) {
+    postData ( loginUrl, credentials, [], emptyFunction )
+  }
+
   function postData(url, data, dataSet, setDataFunction) {
     const stringData = JSON.stringify(data);
     const settings = {
@@ -92,7 +101,7 @@ function App() {
       <NavBar/>
       <Routes>
         <Route path='/' element = { <Home/> }/>
-        <Route path='/login' element = { <Login/> }/>
+        <Route path='/login' element = { <Login credentialsCreated = { onCredentialsCreated } /> }/>
         <Route path='/enrollment' element = { <Enrollment enrollments = { enrollments } students = { students } courses = { courses } enrollmentAdded = { onEnrollmentAdded }/> }/>
         <Route path='/semester' element = { <Semester semesters = { semesters } semesterAdded = { onSemesterAdded } /> }/>
         <Route path='/teacher' element = { <Teacher teachers = { teachers } teacherAdded = { onTeacherAdded } /> }/>
