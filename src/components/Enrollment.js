@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import EnrollmentCard from './EnrollmentCard';
 
-function Enrollment( { enrollments, students, courses, enrollmentAdded } ) {
+function Enrollment( { enrollments, students, courses, enrollmentAdded, deleteEnrollment, updateEnrollment } ) {
     const emptyEnrollment = {
         user_id: 0,
         course_id: 0,
@@ -19,7 +19,7 @@ function Enrollment( { enrollments, students, courses, enrollmentAdded } ) {
         setFromData( { ...formData, [ event.target.name ]: event.target.value } );
     }
 
-    const enrollmentsListUi = enrollments.map( enrollment => <li key = { enrollment.id }><EnrollmentCard key = { enrollment.id } enrollment = { enrollment } /></li>)
+    const enrollmentsListUi = enrollments.map( enrollment => <li key = { enrollment.id }><EnrollmentCard key = { enrollment.id } enrollment = { enrollment } deleteEnrollment = { deleteEnrollment } updateEnrollment = { updateEnrollment } /></li>)
 
     const studentsOptionsUi = students.map( student => <option key = { student.id } value = { student.id }>{ student.first_name } { student.last_name }</option>)
 

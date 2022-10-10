@@ -30,49 +30,49 @@ function App() {
   useEffect( fetchEnrollments, []);
 
   function fetchSemesters() {
-    fetchData( semestersUrl, setSemesters );
+    getData( semestersUrl, setSemesters );
   }
 
   function fetchStudents() {
-    fetchData( studentsUrl, setStudents );
+    getData( studentsUrl, setStudents );
   }
 
   function fetchTeachers() {
-    fetchData( teachersUrl, setTeachers );
+    getData( teachersUrl, setTeachers );
   }
 
   function fetchCourses() {
-    fetchData( coursesUrl, setCourses );
+    getData( coursesUrl, setCourses );
   }
 
   function fetchEnrollments() {
-    fetchData( enrollmentsUrl, setEnrollments );
+    getData( enrollmentsUrl, setEnrollments );
   }
 
-  function fetchData(url, setDataFunction) {
+  function getData(url, setDataFunction) {
     fetch(url)
       .then(response => response.json())
       .then(data => setDataFunction(data));
   }
 
   function onSemesterAdded(semester) {
-    postData( semestersUrl, semester, semesters, setSemesters );
+    fetchData( "POST", semestersUrl, semester, semesters, setSemesters );
   }
 
   function onStudentAdded( student ) {
-    postData( studentsUrl, student, students, setStudents );
+    fetchData( "POST", studentsUrl, student, students, setStudents );
   }
 
   function onTeacherAdded( teacher ) {
-    postData( teachersUrl, teacher, teachers, setTeachers );
+    fetchData( "POST", teachersUrl, teacher, teachers, setTeachers );
   }
 
   function onCourseAdded( course ) {
-    postData( coursesUrl, course, courses, setCourses );
+    fetchData( "POST", coursesUrl, course, courses, setCourses );
   }
 
   function onEnrollmentAdded( enrollment ) {
-    postData ( enrollmentsUrl, enrollment, enrollments, setEnrollments );
+    fetchData ( "POST",enrollmentsUrl, enrollment, enrollments, setEnrollments );
   }
 
   function emptyFunction () {
@@ -80,13 +80,28 @@ function App() {
   }
 
   function onCredentialsCreated( credentials ) {
-    postData ( loginUrl, credentials, [], emptyFunction )
+    fetchData ( "POST", loginUrl, credentials, [], emptyFunction )
   }
 
-  function postData(url, data, dataSet, setDataFunction) {
+  function handleEnrollmentDelete( enrollmentToDelete ) {
+    const deleteUrl = `${enrollmentsUrl}/${enrollmentToDelete.id}`;
+    fetch(deleteUrl, { method: "DELETE" })
+      .then( response => response.json() )
+
+    const updatedEnrollments = enrollments.filter( enrollment => enrollment.id !== enrollmentToDelete.id );
+    setEnrollments( updatedEnrollments );
+  }
+
+  function handleEnrollmentUpdate( enrollment ) {
+    const updateUrl = `${enrollmentsUrl}/${enrollment.id}`;
+    const data = { score: enrollment.score };
+    fetchData( "PATCH", updateUrl, data, enrollments, setEnrollments );
+  }
+
+  function fetchData(action, url, data, dataSet, setDataFunction) {
     const stringData = JSON.stringify(data);
     const settings = {
-      method: "POST",
+      method: action,
       headers: { "Content-Type": "application/json" },
       body: stringData
     }
@@ -102,7 +117,7 @@ function App() {
       <Routes>
         <Route path='/' element = { <Home/> }/>
         <Route path='/login' element = { <Login credentialsCreated = { onCredentialsCreated } /> }/>
-        <Route path='/enrollment' element = { <Enrollment enrollments = { enrollments } students = { students } courses = { courses } enrollmentAdded = { onEnrollmentAdded }/> }/>
+        <Route path='/enrollment' element = { <Enrollment enrollments = { enrollments } students = { students } courses = { courses } enrollmentAdded = { onEnrollmentAdded } deleteEnrollment = { handleEnrollmentDelete } updateEnrollment = { handleEnrollmentUpdate }/> }/>
         <Route path='/semester' element = { <Semester semesters = { semesters } semesterAdded = { onSemesterAdded } /> }/>
         <Route path='/teacher' element = { <Teacher teachers = { teachers } teacherAdded = { onTeacherAdded } /> }/>
         <Route path='/student' element = { <Student students = { students } studentAdded = { onStudentAdded } /> }/>
